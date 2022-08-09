@@ -1,71 +1,74 @@
-function notification(){
-    alert("Let's play Stone, Paper, Scissors (hope you spell things correctly)")
-    alert("The first one to reach 5 points wins!!!\nYou ready?")
-    alert("Let's go!!")
-}
+const choiceOfHumans=document.querySelector(".weapons").childNodes;
+const rock = '🪨', paper = '📜', scissors = '✂️';
+const weaponsList = [rock, paper, scissors];
+choiceOfHumans.forEach((element) => {
+    element.addEventListener('click',humanChosen)
+});
 
-function collectInputAndShowScore(humanScore,computerScore){
-    humanChoice=prompt(`Choose your Weapon\nCurrent score: Human: ${humanScore} Computer: ${computerScore}`).toLowerCase();
-    if(humanChoice== "rock"||humanChoice=="stone"||humanChoice=="paper"||humanChoice=="scissors"){
-        return humanChoice
+function shortcutKey(e){
+    const keys=['KeyR', 'KeyP', 'KeyS'];
+    keyPress=e.code;
+    for(const key of keys){
+        if (keyPress===key){
+            console.log(keyPress);
+        }
     }
-    else {
-        alert("Oops! We think you spelled your weapon wrong. Please try again!")
-        collectInputAndShowScore(humanScore,computerScore);
+};
+
+function humanChosen(e){
+    const humanChoice=e.target.innerHTML;
+    document.querySelector("#human-hand").innerHTML = humanChoice;
+    if(humanChoice!==scissors){
+        document.getElementById("human-hand").style.transform="none";
     }
+    else document.getElementById("human-hand").style.transform="scaleX(-1) rotate(90deg)";
+    console.log(whoWon(humanChoice,computerChosen()));
 }
 
 function whoWon(humanChoice,computerChoice){
-    let humanWon="Human wins!!!", computerWon="Computer wins!!!";
-    if((humanChoice=="stone"||humanChoice=="rock")&&computerChoice==0||humanChoice=="paper"&&computerChoice==1||humanChoice=="scissors"&&computerChoice==2){
-        return tie="It's a tie!";
+    const humanWon = "Human wins!!!";
+    const computerWon = "Computer wins!!!";
+    const tie = "It's a tie!";
+    
+    if(humanChoice === computerChoice) {
+        return tie;
     }
-    if(humanChoice =="paper"){
-        if(computerChoice ==0){
-            return humanWon;
-        }
-        else{
-            return computerWon;
-        }
-    }
-    else if(humanChoice =="rock" || humanChoice=="stone"){
-        if(computerChoice ==2){
-            return humanWon;
-        }
-        else{
-            return computerWon;
-        }
-    }
-    else if (humanChoice =="scissors"){
-        if(computerChoice==1){
-            return humanWon;
-        }
-        else{
-            return computerWon;
-        }
+    switch(humanChoice) {
+        case rock: return computerChoice === scissors ? humanWon : computerWon;
+        case paper: return computerChoice === rock ? humanWon : computerWon;
+        case scissors: return computerChoice === paper ? humanWon : computerWon;
     }
 }
-function computerChoice(){
-    return Math.floor(Math.random()*3);
+
+function computerChosen(){
+    const computerChoice= weaponsList[Math.floor(Math.random()*3)];
+    document.querySelector("#computer-hand").innerHTML = computerChoice;
+    if (computerChoice !==scissors){
+        document.querySelector("#computer-hand").style.transform="none";
+    }
+    else document.querySelector("#computer-hand").style.transform="rotate(90deg)";
+
+    return computerChoice;
 }
 
 
-function keepScore(){
+
+
+function keepScore(event){
     let humanScore=0, computerScore=0;
     let humanWon ="Human wins!!!", computerWon="Computer wins!!!";
     while(humanScore<5 && computerScore<5){
-        console.log(humanScore,computerScore);
         collectInputAndShowScore(humanScore,computerScore)
-        result=whoWon(humanChoice,computerChoice())
+        let result=whoWon(humanChoice,computerChoice())
         if(result===humanWon){
             alert(humanWon);
             humanScore++;
         }
         else if(result===computerWon){
             alert(computerWon);
-            computerScore++;
+                computerScore++;
         }
-        else if(result==tie){
+        else if(result===tie){
             alert(tie);
         }
         
@@ -74,5 +77,9 @@ function keepScore(){
 }
 
 
-notification();
-keepScore();
+document.querySelector(".help").addEventListener('click',bruh)
+function bruh(){
+    const audio= document.querySelector("audio");
+    audio.currentTime =0;
+    audio.play();
+}
