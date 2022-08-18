@@ -22,14 +22,15 @@ function humanChosen(event){
         let keyPress=event.code;
         for(let i=0;i<3;i++){
             if(keyPress===keys[i]){
-                humanChoice = weaponsList[i];
-                break;
+                humanChoice = weaponsList[i]; 
             }
         }
+        if(humanChoice===undefined){return}
     }
     else {
         humanChoice=event.target.innerHTML;
     }
+    
     document.querySelector("#human-hand").innerHTML = humanChoice;
     if(humanChoice!==scissors){
         document.getElementById("human-hand").style.transform="none";
