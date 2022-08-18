@@ -1,22 +1,35 @@
-const choiceOfHumans=document.querySelector(".weapons").childNodes;
-const rock = '🪨', paper = '📜', scissors = '✂️';
-const weaponsList = [rock, paper, scissors];
-choiceOfHumans.forEach((element) => {
+const weaponsList = [rock = '🪨', paper = '📜', scissors = '✂️'];
+
+//Adding bruh sound to help
+document.querySelector(".help").addEventListener('click',()=> {
+    const bruh= document.querySelector("audio");
+    bruh.currentTime =0;
+    bruh.play();
+} )
+
+//Adding event listner for each weapon buttons and keypress//
+document.querySelector(".weapons").childNodes.forEach((element) => {
     element.addEventListener('click',humanChosen)
 });
+document.addEventListener('keypress',humanChosen);
 
-function shortcutKey(e){
-    const keys=['KeyR', 'KeyP', 'KeyS'];
-    keyPress=e.code;
-    for(const key of keys){
-        if (keyPress===key){
-            console.log(keyPress);
+
+function humanChosen(event){
+    //For getting hummanChoice from keypress
+    let humanChoice;
+    if(event.type==="keypress"){
+        const keys=['KeyR', 'KeyP', 'KeyS'];
+        let keyPress=event.code;
+        for(let i=0;i<3;i++){
+            if(keyPress===keys[i]){
+                humanChoice = weaponsList[i];
+                break;
+            }
         }
     }
-};
-
-function humanChosen(e){
-    const humanChoice=e.target.innerHTML;
+    else {
+        humanChoice=event.target.innerHTML;
+    }
     document.querySelector("#human-hand").innerHTML = humanChoice;
     if(humanChoice!==scissors){
         document.getElementById("human-hand").style.transform="none";
@@ -77,9 +90,15 @@ function keepScore(event){
 }
 
 
-document.querySelector(".help").addEventListener('click',bruh)
-function bruh(){
-    const audio= document.querySelector("audio");
-    audio.currentTime =0;
-    audio.play();
+
+
+function shortcutKey(e){
+    console.log(e.currentTarget)
+    const keys=['KeyR', 'KeyP', 'KeyS'];
+    let keyPress=e.code;
+    for(let i=0;i<3;i++){
+        if(keyPress===keys[i]){
+            humanChosen(weaponsList[i])
+        }
+    }
 }
