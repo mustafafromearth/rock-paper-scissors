@@ -2,7 +2,7 @@ const weaponsList = [rock = '🪨', paper = '📜', scissors = '✂️'];
 
 //Adding bruh sound to help
 document.querySelector(".help").addEventListener('click',()=> {
-    const bruh= document.querySelector("audio");
+    const bruh= document.getElementById("bruh");
     bruh.currentTime =0;
     bruh.play();
 } )
@@ -11,31 +11,37 @@ document.querySelector(".help").addEventListener('click',()=> {
 document.querySelector(".weapons").childNodes.forEach((element) => {
     element.addEventListener('click',humanChosen)
 });
-document.addEventListener('keypress',humanChosen);
+document.addEventListener('keyup',humanChosen);
 
 
 function humanChosen(event){
     //For getting hummanChoice from keypress
     let humanChoice;
-    if(event.type==="keypress"){
+    if(event.type==="keyup"){
         const keys=['KeyR', 'KeyP', 'KeyS'];
         let keyPress=event.code;
+        if(keyPress==='Enter'){return}
         for(let i=0;i<3;i++){
             if(keyPress===keys[i]){
                 humanChoice = weaponsList[i]; 
             }
         }
-        if(humanChoice===undefined){return}
+        if(humanChoice===undefined){
+            const uh= document.getElementById("uh");
+            uh.currentTime =0;
+            uh.play();
+            return;
+        }
     }
     else {
         humanChoice=event.target.innerHTML;
     }
     
-    document.querySelector("#human-hand").innerHTML = humanChoice;
-    if(humanChoice!==scissors){
-        document.getElementById("human-hand").style.transform="none";
-    }
-    else document.getElementById("human-hand").style.transform="scaleX(-1) rotate(90deg)";
+                        document.querySelector("#human-hand").innerHTML = humanChoice;
+                        if(humanChoice!==scissors){
+                            document.getElementById("human-hand").style.transform="none";
+                        }
+                        else document.getElementById("human-hand").style.transform="scaleX(-1) rotate(90deg)";
     console.log(whoWon(humanChoice,computerChosen()));
 }
 
@@ -88,18 +94,4 @@ function keepScore(event){
         
     }
     humanScore>computerScore?alert("Human wins the match!"):alert("Computer wins the match!")
-}
-
-
-
-
-function shortcutKey(e){
-    console.log(e.currentTarget)
-    const keys=['KeyR', 'KeyP', 'KeyS'];
-    let keyPress=e.code;
-    for(let i=0;i<3;i++){
-        if(keyPress===keys[i]){
-            humanChosen(weaponsList[i])
-        }
-    }
 }
