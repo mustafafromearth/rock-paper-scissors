@@ -11,13 +11,14 @@ document.querySelector(".help").addEventListener('click',()=> {
 document.querySelector(".weapons").childNodes.forEach((element) => {
     element.addEventListener('click',humanChosen)
 });
-document.addEventListener('keyup',humanChosen);
+document.addEventListener('keypress',humanChosen);
 
 
 function humanChosen(event){
     //For getting hummanChoice from keypress
     let humanChoice;
-    if(event.type==="keyup"){
+    if(event.type==="keypress"){
+        if(event.repeat===true){return}
         const keys=['KeyR', 'KeyP', 'KeyS'];
         let keyPress=event.code;
         if(keyPress==='Enter'){return}
@@ -74,7 +75,7 @@ function computerChosen(){
 
 
 
-function keepScore(event){
+function keepdScore(humanChoice){
     let humanScore=0, computerScore=0;
     let humanWon ="Human wins!!!", computerWon="Computer wins!!!";
     while(humanScore<5 && computerScore<5){
