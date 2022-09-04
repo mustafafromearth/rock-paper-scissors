@@ -1,3 +1,4 @@
+// Use 🧱 instead of 🪨 for windows 10
 const weaponsList = [rock = '🪨', paper = '📜', scissors = '✂️'];
 
 //Adding bruh sound to help
@@ -19,9 +20,9 @@ function humanChosen(event){
     let humanChoice;
     if(event.type==="keypress"){
         if(event.repeat===true){return}
-        const keys=['KeyR', 'KeyP', 'KeyS'];
-        let keyPress=event.code;
-        if(keyPress==='Enter'){return}
+        if(event.key==="Enter"){return}
+        const keys=['R', 'P', 'S'];
+        let keyPress=event.key.toUpperCase();
         for(let i=0;i<3;i++){
             if(keyPress===keys[i]){
                 humanChoice = weaponsList[i]; 
@@ -38,12 +39,12 @@ function humanChosen(event){
         humanChoice=event.target.innerHTML;
     }
     
-                        document.querySelector("#human-hand").innerHTML = humanChoice;
-                        if(humanChoice!==scissors){
-                            document.getElementById("human-hand").style.transform="none";
-                        }
-                        else document.getElementById("human-hand").style.transform="scaleX(-1) rotate(90deg)";
-    console.log(whoWon(humanChoice,computerChosen()));
+        document.querySelector("#human-hand").innerHTML = humanChoice;
+        if(humanChoice!==scissors){
+            document.getElementById("human-hand").style.transform="none";
+        }
+        else document.getElementById("human-hand").style.transform="scaleX(-1) rotate(90deg)";
+        keepScore(humanChoice)
 }
 
 function whoWon(humanChoice,computerChoice){
@@ -74,25 +75,32 @@ function computerChosen(){
 
 
 
-
-function keepdScore(humanChoice){
-    let humanScore=0, computerScore=0;
-    let humanWon ="Human wins!!!", computerWon="Computer wins!!!";
-    while(humanScore<5 && computerScore<5){
-        collectInputAndShowScore(humanScore,computerScore)
-        let result=whoWon(humanChoice,computerChoice())
-        if(result===humanWon){
-            alert(humanWon);
-            humanScore++;
+function keepScore(humanChoice){
+    const humanScoreHtml = document.querySelector('.human-score');
+    const computerScoreHtml =  document.querySelector('.computer-score');
+    const result = whoWon(humanChoice,computerChosen());
+    const resultHtml = document.querySelector('.result');
+    let humanScore= parseInt(humanScoreHtml.innerHTML.slice(-1));
+    let computerScore= parseInt(computerScoreHtml.innerHTML.slice(-1));
+   
+    resultHtml.innerHTML = result;
+    console.log(result)
+    switch(result){
+        case "Human wins!!!": { humanScore++
+            humanScoreHtml.innerHTML = humanScoreHtml.innerHTML.slice(0,-1) + humanScore;
         }
-        else if(result===computerWon){
-            alert(computerWon);
-                computerScore++;
-        }
-        else if(result===tie){
-            alert(tie);
-        }
-        
+        break;
+        case "Computer wins!!!": { computerScore++
+            computerScoreHtml.innerHTML = computerScoreHtml.innerHTML.slice(0,-1) + computerScore;
+        };
     }
-    humanScore>computerScore?alert("Human wins the match!"):alert("Computer wins the match!")
+
+    if(humanScore===5 || computerScore===5){
+        humanScore>computerScore? resultHtml.innerHTML = "Human wins the match! <br> Press any key to replay": 
+            resultHtml.innerHTML = "Computer wins the match! <br> Press any key to replay";
+        document.addEventListener('keydown',()=> {
+            humanScoreHtml.innerHTML = humanScoreHtml.innerHTML.slice(0,-1) + 0;
+            computerScoreHtml.innerHTML = computerScoreHtml.innerHTML.slice(0,-1) + 0;
+        })
+    }
 }
